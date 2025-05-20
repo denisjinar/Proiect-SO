@@ -34,7 +34,7 @@ int removeHunt(const char *hunt_id);
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
-        fprintf(stderr, "Eroare");
+        fprintf(stderr, "Eroare1");
         exit(-1);
     }
 
@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
         int value = atoi(argv[8]);
 
         if (addTreasure(hunt_id, treasure_id, username, latitude, longitude, clue, value) < 0) {
-            fprintf(stderr, "Eroare la adăugarea comorii.\n");
+            fprintf(stderr, "Eroare la adaugarea comorii.\n");
             exit(-1);
         }
     } else if (strcmp(command, "list") == 0) {
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
             exit(-1);
         }
     } else {
-        fprintf(stderr, "Comandă necunoscută: %s\n", command);
+        fprintf(stderr, "Comanda necunoscuta: %s\n", command);
         exit(-1);
     }
 
@@ -113,16 +113,16 @@ int createHuntDirectory(const char *hunt_id) { //se creeaza un director pentru h
 int createSymlinkForLog(const char *hunt_id) { //pt a avea o cale scurta catre fisierul log
     char huntDir[256], logPath[256], symlinkName[256];
     if (snprintf(huntDir, sizeof(huntDir), "treasure_hunts/%s", hunt_id) >= sizeof(huntDir)) {
-        fprintf(stderr, "Eroare\n");
+        fprintf(stderr, "Eroare2\n");
         return -1;
     }
     if (snprintf(logPath, sizeof(logPath), "%s/logged_hunt", huntDir) >= sizeof(logPath)) {
-        fprintf(stderr, "Eroare\n");
+        fprintf(stderr, "Eroare3\n");
         return -1;
     }
 
     if (snprintf(symlinkName, sizeof(symlinkName), "logged_hunt-%s", hunt_id) >= sizeof(symlinkName)) {
-        fprintf(stderr, "Eroare\n");
+        fprintf(stderr, "Eroare4\n");
         return -1;
     }
     unlink(symlinkName);
@@ -136,11 +136,11 @@ int createSymlinkForLog(const char *hunt_id) { //pt a avea o cale scurta catre f
 int logOperation(const char *hunt_id, const char *operation, const char *details) { //pt inregistrarea detaliilor actiunilor in fisierul log 
     char huntDir[256], logPath[256];
     if (snprintf(huntDir, sizeof(huntDir), "treasure_hunts/%s", hunt_id) >= sizeof(huntDir)) {
-        fprintf(stderr, "Eroare\n");
+        fprintf(stderr, "Eroare5\n");
         return -1;
     }
     if (snprintf(logPath, sizeof(logPath), "%s/logged_hunt", huntDir) >= sizeof(logPath)) {
-        fprintf(stderr, "Eroare\n");
+        fprintf(stderr, "Eroare6\n");
         return -1;
     }
     int fd = open(logPath, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -204,7 +204,7 @@ int addTreasure(const char *hunt_id, const char *treasure_id, const char *userna
     if (logOperation(hunt_id, "add", treasure_id) < 0)
         return -1;
     
-    printf("Comoara '%s' a fost adăugată cu succes în hunt-ul '%s'\n", treasure_id, hunt_id);
+    printf("Comoara '%s' a fost adaugata cu succes in hunt-ul '%s'\n", treasure_id, hunt_id);
     return 0;
 }
 
@@ -218,7 +218,7 @@ int listTreasures(const char *hunt_id) {
         return -1;
     }
     printf("Hunt: %s\n", hunt_id);
-    printf("Dimensiune fișier: %ld bytes\n", st.st_size);
+    printf("Dimensiune fisier: %ld bytes\n", st.st_size);
     printf("Ultima modificare: %s", ctime(&st.st_mtime));
     
     int fd = open(filePath, O_RDONLY);
@@ -259,7 +259,7 @@ int viewTreasure(const char *hunt_id, const char *treasure_id) {
     }
     close(fd);
     if (!found) {
-        fprintf(stderr, "Comoara cu ID-ul '%s' nu a fost găsită.\n", treasure_id);
+        fprintf(stderr, "Comoara cu ID-ul '%s' nu a fost gasita.\n", treasure_id);
         return -1;
     }
     return 0;
@@ -322,14 +322,14 @@ int removeTreasure(const char *hunt_id, const char *treasure_id) {
     close(fd);
     
     if (!found) {
-        fprintf(stderr, "Comoara cu ID-ul '%s' nu a fost găsită pentru eliminare.\n", treasure_id);
+        fprintf(stderr, "Comoara cu ID-ul '%s' nu a fost gasita pentru eliminare.\n", treasure_id);
         return -1;
     }
     
     if (logOperation(hunt_id, "remove_treasure", treasure_id) < 0)
         return -1;
     
-    printf("Comoara '%s' a fost eliminată din hunt-ul '%s'.\n", treasure_id, hunt_id);
+    printf("Comoara '%s' a fost eliminata din hunt-ul '%s'.\n", treasure_id, hunt_id);
     return 0;
 }
 int removeHunt(const char *hunt_id) {
@@ -342,7 +342,7 @@ int removeHunt(const char *hunt_id) {
     char command[1024];
     snprintf(command, sizeof(command), "rm -rf %s %s", huntDir, symlinkName);
     if (system(command) != 0) {
-        fprintf(stderr, "Eroare la ștergerea hunt-ului '%s'.\n", hunt_id);
+        fprintf(stderr, "Eroare la stergerea hunt-ului '%s'.\n", hunt_id);
         return -1;
     }
     
